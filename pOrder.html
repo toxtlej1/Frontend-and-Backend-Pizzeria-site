@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  font-family: Arial;
+}
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
+}
+
+body {
+  font-family: Arial;
+  font-size: 17px;
+  padding: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin: 0 -16px;
+}
+
+.col-25 {
+  -ms-flex: 25%;
+  flex: 25%;
+}
+
+.col-50 {
+  -ms-flex: 50%;
+  flex: 50%;
+}
+
+.col-75 {
+  -ms-flex: 75%;
+  flex: 75%;
+}
+
+.col-25,
+.col-50,
+.col-75 {
+  padding: 0 16px;
+}
+
+.container {
+  background-color: #f2f2f2;
+  padding: 5px 20px 15px 20px;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+}
+
+input[type=text] {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+label {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.icon-container {
+  margin-bottom: 20px;
+  padding: 7px 0;
+  font-size: 24px;
+}
+
+.btn {
+  background-color: #B80000;
+  color: white;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  width: 100%;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 17px;
+}
+
+.btn:hover {
+  background-color: #45a049;
+}
+
+a {
+  color: #2196F3;
+}
+
+hr {
+  border: 1px solid lightgrey;
+}
+
+span.price {
+  float: right;
+  color: grey;
+}
+
+@media (max-width: 800px) {
+  .row {
+    flex-direction: column-reverse;
+  }
+  .col-25 {
+    margin-bottom: 20px;
+  }
+}
+</style>
+<title>Order Now</title>
+</head>
+<body> 
+
+<div class="navbar">
+    <a href="pizza.html">Home</a>
+    <a href="pOrder.html">Order Now</a>
+    <a href="pContact.html">Contact Us</a>
+</div>
+<br>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+</style>
+</head>
+<body>
+
+<h2>Dom's Pizzeria</h2>
+<br>
+
+<form action="http://php.wpu-cs2100.com/toxtlej1/pizzapayment.php" method="post" id="pizzaForm" class="demoForm">
+
+    <fieldset>
+        <h2>Pizza Pie Size</h2>
+        <p>
+            <select name="size" id="size">
+                <option value="5" selected="selected">Small: $5</option>
+                <option value="8">Medium: $8</option>
+                <option value="12">Large: $12</option>
+            </select><br><br>
+
+
+            <h2>Toppings</h2>
+            <h4>Ctrl-Click to Select Multiple Toppings</h4>
+            <select name="toppings" id="toppings" multiple="multiple" size="5">
+                <option value="0" selected="selected"> None</option>
+                <option value=".40">Mushrooms</option>
+                <option value=".30">Onions</option>
+                <option value=".40">Black Olives</option>
+                <option value=".50">Sausage</option>
+                <option value=".50">Pepperoni</option>
+            </select>
+            <input type="hidden" name="toppings_tot" value="0" /><br><br>
+         
+            <label>Total: $<input type="text" class="num" name="total" value="0.00" readonly="readonly" /></label>
+        </p>
+        
+    </fieldset>
+
+<script>
+document.getElementById('size').onchange = function() {
+    var form = this.form;
+    var total = parseFloat( this.value ) + parseFloat( form.elements['toppings_tot'].value );
+    form.elements['total'].value = formatDecimal(total);
+};
+
+document.getElementById('toppings').onchange = function() {
+    var form = this.form;
+    form.elements['toppings_tot'].value = 0;
+
+    getSelectedOptions( this, calcToppingsTotal );
+    
+    var tops_tot = parseFloat( form.elements['toppings_tot'].value );
+    var size_price = parseFloat( form.elements['size'].value );
+    form.elements['total'].value = formatDecimal(tops_tot + size_price );
+};
+
+function calcToppingsTotal(opt) {
+    var tot_fld = opt.form.elements['toppings_tot'];
+    var val = parseFloat( tot_fld.value );
+    tot_fld.value = val + parseFloat( opt.value );
+}
+
+function getSelectedOptions(sel, fn) {
+    var opts = [], opt;
+    
+    for (var i=0, len=sel.options.length; i<len; i++) {
+        opt = sel.options[i];
+        if ( opt.selected ) {
+            opts.push(opt);
+            if (fn) {
+                fn(opt);
+            }
+        }
+    }
+    return opts;
+}
+
+function formatDecimal(val, n) {
+    n = n || 2;
+    var str = "" + Math.round ( parseFloat(val) * Math.pow(10, n) );
+    while (str.length <= n) {
+        str = "0" + str;
+    }
+    var pt = str.length - n;
+    return str.slice(0,pt) + "." + str.slice(pt);
+}
+function move() {
+          var elem = document.getElementById("myBar");   
+          var width = 0;
+          var id = setInterval(frame, 50);
+          function frame() {
+            if (width >= 100) {
+              clearInterval(id);
+              document.getElementById("myP").className = "w3-text-green w3-animate-opacity";
+              document.getElementById("myP").innerHTML = "Your Order Is Ready For Pickup!";
+            } else {
+              width++; 
+              elem.style.width = width + '%'; 
+              var num = width * 1 / 10;
+              num = num.toFixed(0)
+              document.getElementById("demo").innerHTML = num;
+            }
+          }
+        }
+</script>
+<br>
+
+<label for="myComments">Special Requests:</label><br>
+<textarea name="myComments" id="myComments" rows="2" cols="20"></textarea><br>
+<input id="mySubmit" type="submit" value="Submit">
+<input id="myReset" type="reset" value="Reset">
+
+<br><br><br>
+<hr>
+<br>
+
+<div class="row">
+  <div class="col-75">
+    <div class="container">
+      <form action="/action_page.php">
+      
+        <div class="row">
+          <div class="col-50">
+            <h3>Billing Address</h3>
+            <label for="myName"><i class="fa fa-user"></i> Full Name</label>
+            <input type="text" id="myName" name="myName" placeholder="" required>
+            <label for="email"><i class="fa fa-envelope"></i> Email</label>
+            <input type="text" id="email" name="email" placeholder="" required>
+            <label for="myAddress"><i class="fa fa-address-card-o"></i> Address</label>
+            <input type="text" id="myAddress" name="myAddress" placeholder="" required>
+            <label for="myPlace"><i class="fa fa-institution"></i> City</label>
+            <input type="text" id="myPlace" name="myPlace" placeholder="" required>
+
+            <div class="row">
+              <div class="col-50">
+                <label for="myState">State</label>
+                <input type="text" id="myState" name="myState" placeholder="" required>
+              </div>
+              <div class="col-50">
+                <label for="myZip">Zip</label>
+                <input type="text" id="myZip" name="myZip" placeholder="" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-50">
+            <h3>Payment</h3>
+            <label for="fname">Accepted Cards</label>
+            <div class="icon-container">
+              <i class="fa fa-cc-visa" style="color:navy;"></i>
+              <i class="fa fa-cc-amex" style="color:blue;"></i>
+              <i class="fa fa-cc-mastercard" style="color:red;"></i>
+              <i class="fa fa-cc-discover" style="color:orange;"></i>
+            </div>
+            <label for="cname">Name on Card</label>
+            <input type="text" id="cname" name="cname" placeholder="" required>
+            <label for="ccnum">Credit card number</label>
+            <input type="text" id="ccnum" name="ccnum" placeholder="" required>
+            <label for="expmonth">Exp Month</label>
+            <input type="text" id="expmonth" name="expmonth" placeholder="" required>
+            <div class="row">
+              <div class="col-50">
+                <label for="expyear">Exp Year</label>
+                <input type="text" id="expyear" name="expyear" placeholder="" required>
+              </div>
+              <div class="col-50">
+                <label for="cvv">CVV</label>
+                <input type="text" id="cvv" name="cvv" placeholder="" required>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        <input type="submit" value="Confirm to Checkout" class="btn">
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>
